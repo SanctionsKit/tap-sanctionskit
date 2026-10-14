@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tap-sanctionskit"
+version = "0.1.0.dev0"
+description = "Full-refresh Singer extractor for an account's retained SanctionsKit results and audit records"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "SanctionsKit"}]
+dependencies = ["singer-sdk>=0.54.7,<0.55", "requests>=2.32.4,<3", "jsonschema>=4.23,<5", "rfc3339-validator>=0.1.4,<1"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+tap-sanctionskit = "tap_sanctionskit.tap:TapSanctionsKit.cli"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tap_sanctionskit"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "examples", "README.md", "CONTRACT.md", "LICENSE", "pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

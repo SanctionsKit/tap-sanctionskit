@@ -1,0 +1,274 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "caseId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "actorEmail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "open",
+        "confirmed",
+        "dismissed"
+      ]
+    },
+    "businessDisposition": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "allow",
+        "restrict",
+        "escalate"
+      ]
+    },
+    "appliedControls": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "governanceRevision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "organizationApproval": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "requireSecondReview": {
+                  "default": false,
+                  "type": "boolean"
+                },
+                "secondReviewFor": {
+                  "default": [],
+                  "maxItems": 4,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "same_identity",
+                      "allow",
+                      "restrict",
+                      "escalate"
+                    ]
+                  }
+                },
+                "approverRoles": {
+                  "default": [
+                    "owner",
+                    "admin",
+                    "analyst"
+                  ],
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "owner",
+                      "admin",
+                      "analyst"
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "requireSecondReview",
+                "secondReviewFor",
+                "approverRoles"
+              ]
+            },
+            "restrictedRoles": {
+              "type": "object",
+              "properties": {
+                "approval": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "analyst",
+                      "developer",
+                      "viewer"
+                    ]
+                  }
+                },
+                "production": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "analyst",
+                      "developer",
+                      "viewer"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "approval",
+                "production"
+              ],
+              "additionalProperties": false
+            },
+            "screeningPolicy": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "version": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "review": {
+                      "$schema": "https://json-schema.org/draft/2020-12/schema",
+                      "type": "object",
+                      "properties": {
+                        "requireSecondReview": {
+                          "default": false,
+                          "type": "boolean"
+                        },
+                        "secondReviewFor": {
+                          "default": [],
+                          "maxItems": 4,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "same_identity",
+                              "allow",
+                              "restrict",
+                              "escalate"
+                            ]
+                          }
+                        },
+                        "approverRoles": {
+                          "default": [
+                            "owner",
+                            "admin",
+                            "analyst"
+                          ],
+                          "minItems": 1,
+                          "maxItems": 3,
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "owner",
+                              "admin",
+                              "analyst"
+                            ]
+                          }
+                        }
+                      },
+                      "additionalProperties": false,
+                      "required": [
+                        "requireSecondReview",
+                        "secondReviewFor",
+                        "approverRoles"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "version",
+                    "review"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "governanceRevision",
+            "organizationApproval",
+            "restrictedRoles",
+            "screeningPolicy"
+          ],
+          "additionalProperties": false,
+          "description": "Immutable decision-time approval configuration. A null appliedControls value on a decision means no historic snapshot is available; current settings are never substituted. Notification recipients and document hosts are excluded."
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "screeningId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "subjectName": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "evidenceAvailable": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "caseId",
+    "actorId",
+    "actorEmail",
+    "decision",
+    "businessDisposition",
+    "appliedControls",
+    "notes",
+    "createdAt",
+    "screeningId",
+    "subjectName",
+    "evidenceAvailable"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
